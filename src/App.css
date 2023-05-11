@@ -24,6 +24,10 @@
   color: white;
 }
 
+.ant-layout-sider .ant-menu-item {
+  border: 1px solid #5a5a5a99;
+}
+
 .App-link {
   color: #61dafb;
 }

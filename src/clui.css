@@ -1,37 +1,87 @@
-.fader-list {
-    height: 100%;
-  }
-  
-  .fader-list > .ant-space-item {
-    height: 100%;
-    display: flex;
-    min-width: 60px;
-    text-align: center;
-  }
-  
-  .fader-list > .ant-space-item > div {
-    margin: 0 auto;
-  }
-  
-  .channel-strip {
-    display: flex;
-    text-align: center;
-    height: 100%;
-  }
-  
-  .ant-space-item:has(.channel-fader) {
-    flex:1;
-  }
-  
-  .channel-fader {
-    height: calc(100% - 50px);
-    margin: 25px auto 15px auto;
-  }
-  
-  .channel-fader .ant-slider-handle::after {
-    border-radius: 2px;
-    height: 40px !important;
-    top: -20px;
-    inset-block-start: -20px !important;
-  }
-  
+.ant-space-item:has(>.flex-1) {
+  flex: 2;
+}
+.ant-space-item:has(>.flex-2) {
+  flex: 3;
+}
+.ant-space-item:has(>.flex-8) {
+  flex: 9;
+}
+.ant-space-item:has(>.flex-12) {
+  flex: 13;
+}
+
+aside.ant-layout-sider.ant-layout-sider-dark, aside .ant-menu.ant-menu-dark {
+  background: #222 !important;
+}
+
+.fader-section, .fader-list {
+  height: 100%;
+}
+
+.fader-section > .ant-space-item, .fader-list > .ant-space-item {
+  height: 100%;
+  display: flex;
+  min-width: 60px;
+  text-align: center;
+}
+
+.fader-section > .ant-space-item > div {
+  margin: 0 auto;
+}
+
+.channel-strip {
+  display: flex;
+  text-align: center;
+  height: 100%;
+}
+
+.channel-label {
+  border: 1px solid #333;
+  border-radius: 5px;
+  position: relative;
+  overflow: hidden;
+  margin: 0 5px;
+  padding: 0 2px 5px 2px;
+  font-size: .8rem;
+  font-weight: bold;
+}
+
+.channel-label span {
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  font-size: .6rem;
+  opacity: 0.8;
+  text-align: left;
+}
+
+.fader-section .ant-space-item:has(>.channel-fader) {
+  flex: auto 1;
+}
+
+.fader-section .fader-list>.ant-space-item {
+  flex: 1;
+}
+
+
+.channel-fader {
+  height: calc(100% - 50px);
+  margin: 25px auto 15px auto;
+}
+
+.channel-fader .ant-slider-handle {
+  z-index: +1;
+}
+
+.channel-fader .ant-slider-handle::after {
+  border-radius: 2px;
+  height: 50px !important;
+  width: 30px !important;
+  top: -25px;
+  left: -10px;
+  inset-inline-start: -10px !important;
+  inset-block-start: -25px !important;
+}
+
+

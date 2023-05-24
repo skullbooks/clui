@@ -1,13 +1,13 @@
 import { Space, Slider, Button, theme } from 'antd';
 import React, { useEffect, useState } from 'react';
-import { Subscription } from 'rxjs';
-import { HwChannel, MasterChannel } from 'soundcraft-ui-connection';
+import { Subscription, SubscriptionLike } from 'rxjs';
+import { HwChannel, MasterBus, MasterChannel } from 'soundcraft-ui-connection';
 import { Knob } from 'primereact/knob';
 import { FaderBankKnobMode } from '../interfaces/states';
 
 function MixChannel({channel, hwChannel, appState, style}: {
-  channel:MasterChannel,
-  hwChannel: HwChannel|null,
+  channel: MasterChannel,
+  hwChannel:  HwChannel | null ,
   appState: {
     selectedChannel: string, selectChannel: React.Dispatch<string>, 
     bankKnobMode: FaderBankKnobMode}, 
@@ -37,7 +37,7 @@ function MixChannel({channel, hwChannel, appState, style}: {
     updateGain(0);
     updateGainDB('0');
     updatePan(0);
-    const subscriptions: Subscription[] = [];
+    const subscriptions: SubscriptionLike[] = [];
     (channel.name$) ? subscriptions.push(channel.name$.subscribe(value => { updateChannelName(`${value}`);})) : updateChannelName('Master');
     if (channel.mute$) {
       subscriptions.push(channel.mute$.subscribe(value => { updateMuteState((value)? true : false);}));
@@ -94,7 +94,6 @@ function MixChannel({channel, hwChannel, appState, style}: {
     if ((bankKnobMode === FaderBankKnobMode.pan)) channel.pan((e.value/100)+0.5);
   }
 
-  console.log("THEME", token);
   return (
 <Space className='channel-strip' direction="vertical" style={style}>
   <div style={{ height: '60px', lineHeight: '60px', paddingTop: '5px' }}>

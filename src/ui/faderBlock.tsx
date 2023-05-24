@@ -2,6 +2,7 @@ import { Layout, Space, Menu, theme } from 'antd';
 import MixChannel from './mixChannel';
 import { useState } from 'react';
 import { FaderBlockType, FaderBankKnobMode } from '../interfaces/states';
+import { getChannelById, getHwChannelById } from '../utils/channelFinder';
 
 function FaderBlock({channelCount, mixer, appState, userFaderBlockConfig, bankCount, type}:{
   channelCount:number, bankCount:number, userFaderBlockConfig:any, type: FaderBlockType, mixer:any, 
@@ -41,39 +42,9 @@ function FaderBlock({channelCount, mixer, appState, userFaderBlockConfig, bankCo
 
   let faderItems: JSX.Element[] = [];
   for (let i = 0; i < channelCount; i++) {
-    const identifier = (!channelsIdentifier[i]) ? [] : channelsIdentifier[i].split('.');
-    let channel;
-    let hwChannel = null;
+    const channel = getChannelById(channelsIdentifier[i], mixer);
+    const hwChannel = getHwChannelById(channelsIdentifier[i], mixer);
 
-    switch (identifier[0]) {
-      case 'i':
-        channel = mixer.master.input(Number(identifier[1])+1);
-        hwChannel = mixer.hw(Number(identifier[1])+1);
-        break;
-      case 'a':
-        channel = mixer.master.aux(Number(identifier[1])+1);
-        break;
-      case 'f':
-        channel = mixer.master.fx(Number(identifier[1])+1);
-        break;
-      case 'l':
-        channel = mixer.master.line(Number(identifier[1])+1);
-        break;
-      case 'p':
-        channel = mixer.master.player(Number(identifier[1])+1);
-        break;
-      case 's':
-        channel = mixer.master.sub(Number(identifier[1])+1);
-        break;
-      case 'v':
-        channel = mixer.master.vca(Number(identifier[1])+1);
-        break;
-      case 'm':
-        channel = mixer.master;
-        break;
-      default:
-    channel = mixer.master.input(100);
-    }
     faderItems.push(<MixChannel channel={channel} hwChannel={hwChannel} appState={appState} style={{ flex: 1, padding: '10px 0' }}/>);
   }
 

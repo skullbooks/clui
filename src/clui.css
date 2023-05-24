@@ -15,14 +15,17 @@ aside.ant-layout-sider.ant-layout-sider-dark, aside .ant-menu.ant-menu-dark {
   background: #222 !important;
 }
 
-.fader-section, .fader-list {
+.solo-section, .fader-section, .fader-list {
   height: 100%;
 }
 
-.fader-section > .ant-space-item, .fader-list > .ant-space-item {
+.solo-section > .ant-space-item, .fader-section > .ant-space-item, .fader-list > .ant-space-item {
   height: 100%;
   display: flex;
   min-width: 60px;
+}
+
+.fader-section > .ant-space-item, .fader-list > .ant-space-item {
   text-align: center;
 }
 

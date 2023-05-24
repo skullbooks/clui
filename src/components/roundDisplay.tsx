@@ -51,7 +51,8 @@ function RoundDisplay({
     height = null,
     rangeColor = '#333',
     valueColor = '#aaa',
-    strokeWidth = 14
+    strokeWidth = 14,
+    style = {}
 }:{
     displaySize?: number,
     zero?: number,
@@ -64,6 +65,7 @@ function RoundDisplay({
     rangeColor?: string,
     valueColor?: string,
     strokeWidth?: number,
+    style?: object
 }) {
 
     const valueDeg = (mode === RoundDisplayMode.Point) ? (value*(displaySize-15))/(max-min) : (value*displaySize)/(max-min);
@@ -72,10 +74,11 @@ function RoundDisplay({
     const polygonStringRange = buildPolygonStringBar(displaySize);
 
     height = (height) ? height : width;
+    style = { ...style, width: width, height: height }
 
     return (
     <>
-    <DisplayMask style={{ width: width, height: height }}>
+    <DisplayMask style={style}>
     <EmptyBar style={{ 
         clipPath: `polygon(${polygonStringRange})`, 
         transform: `rotate(${zero+45}deg)`, 

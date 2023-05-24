@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import { Layout, ConfigProvider, theme, Menu, Space } from 'antd';
 import './App.css';
 import './clui.css';
-import { SoundcraftUI } from 'soundcraft-ui-connection';
 import FaderBlock from './ui/faderBlock';
 import { mixerUiConfig, userUiConfig } from './statics/config';
 import { FaderBankKnobMode, FaderBlockType } from './interfaces/states';
 import { ItemType } from 'antd/es/menu/hooks/useItems';
 import SoloChannel from './ui/soloChannel';
+import { SoundcraftUI } from 'soundcraft-ui-connection';
 
 declare global {
   interface Window { mixer: any; }
 }
 
-function App({mixer}: {mixer:SoundcraftUI}) {
+function App({mixer}: {mixer: SoundcraftUI}) {
   window.mixer = mixer;
 
   mixer.connect().then(() => {
@@ -115,7 +115,7 @@ function App({mixer}: {mixer:SoundcraftUI}) {
         {faderBlocks}
       </Space>
       :
-      <Space className='fader-section' style={{ display: 'flex', flex: 1, columnGap: 0 }}>
+      <Space className='solo-section' style={{ display: 'flex', flex: 1, columnGap: 0 }}>
         <SoloChannel mixer={mixer} appState={applicationState} />
         {mainSidebar}
       </Space>

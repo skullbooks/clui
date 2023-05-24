@@ -1,11 +1,12 @@
 import { Layout, Space, Menu, theme } from 'antd';
 import { Knob } from 'primereact/knob';
 import { useEffect, useState } from 'react';
-import { Subscription } from 'rxjs';
+import { Subscription, SubscriptionLike } from 'rxjs';
 import { FaderBlockType, FaderBankKnobMode } from '../interfaces/states';
 import { HwChannel, MasterChannel } from 'soundcraft-ui-connection';
 import EqControl from './eqControl';
 import RoundDisplay, { RoundDisplayMode } from '../components/roundDisplay';
+import { getChannelById, getHwChannelById } from '../utils/channelFinder';
 
 function SoloChannel({mixer, appState}:{
   mixer:any, 
@@ -17,48 +18,9 @@ function SoloChannel({mixer, appState}:{
 }) {
 
   const { Sider, Content } = Layout;
+  const {selectedChannel} = appState;
 
-  /*
-  let faderItems: JSX.Element[] = [];
-  for (let i = 0; i < channelCount; i++) {
-    const identifier = (!channelsIdentifier[i]) ? [] : channelsIdentifier[i].split('.');
-    let channel;
-    let hwChannel = null;
 
-    switch (identifier[0]) {
-      case 'i':
-        channel = mixer.master.input(Number(identifier[1])+1);
-        hwChannel = mixer.hw(Number(identifier[1])+1);
-        break;
-      case 'a':
-        channel = mixer.master.aux(Number(identifier[1])+1);
-        break;
-      case 'f':
-        channel = mixer.master.fx(Number(identifier[1])+1);
-        break;
-      case 'l':
-        channel = mixer.master.line(Number(identifier[1])+1);
-        break;
-      case 'p':
-        channel = mixer.master.player(Number(identifier[1])+1);
-        break;
-      case 's':
-        channel = mixer.master.sub(Number(identifier[1])+1);
-        break;
-      case 'v':
-        channel = mixer.master.vca(Number(identifier[1])+1);
-        break;
-      case 'm':
-        channel = mixer.master;
-        break;
-      default:
-    channel = mixer.master.input(100);
-    }
-    faderItems.push(<MixChannel channel={channel} hwChannel={hwChannel} appState={appState} style={{ flex: 1, padding: '10px 0' }}/>);
-  }
-
-  const flexClass = (userFaderBlockConfig.banks.length > 1) ? `flex-${channelCount}` : `flex-${channelCount-1}`;
-*/
 const { useToken } = theme;
 const { token } = useToken();
 
@@ -66,8 +28,8 @@ const [gain, updateGain] = useState(0);
 const [gainDB, updateGainDB] = useState('0');
 const [gainDisabled, disableGain] = useState(false);
 
-const channel: MasterChannel = mixer.master.input(1);
-const hwChannel: HwChannel = mixer.hw(1);
+const channel = getChannelById(selectedChannel, mixer);
+const hwChannel = getHwChannelById(selectedChannel, mixer);
 
 useEffect(() => {
     console.log("INIT CHANNEL LISTENERS");
@@ -76,7 +38,7 @@ useEffect(() => {
     updateGain(0);
     updateGainDB('0');
 //    updatePan(0);
-    const subscriptions: Subscription[] = [];
+    const subscriptions: SubscriptionLike[] = [];
 //    (channel.name$) ? subscriptions.push(channel.name$.subscribe(value => { updateChannelName(`${value}`);})) : updateChannelName('Master');
 //    if (channel.mute$) {
 //      subscriptions.push(channel.mute$.subscribe(value => { updateMuteState((value)? true : false);}));
@@ -108,7 +70,7 @@ const knobConfig = {
     disabled: gainDisabled
   }
   const onPanChange = (e: any) => {
-    hwChannel.setGain(e.value/100);
+    if (hwChannel) hwChannel.setGain(e.value/100);
   }
 
   
@@ -119,7 +81,7 @@ const knobConfig = {
     valueColor={token.colorPrimary} rangeColor={token.colorFillContentHover} textColor={token.colorTextDescription} strokeWidth={20}
     onChange={onPanChange} />
 
-        <EqControl mixer={mixer}/>
+        <EqControl mixer={mixer} channel={channel}/>
     </div>
   );
 }
